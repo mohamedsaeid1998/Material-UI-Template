@@ -53,7 +53,7 @@ let totalPrice = 0
           </Paper>
         </>
       })}
-      {totalPrice!==0?<Typography textAlign={'center'} mt={"30px"} color={theme.palette.primary.main} variant="h4">👉 You Spent $ {totalPrice}</Typography>:null}
+      {totalPrice!==0?<Typography textAlign={'center'} mt={"30px"} color={theme.palette.primary.main} variant="h4">👉 You Spent ${totalPrice}</Typography>:null}
 
     </Box>
   </>

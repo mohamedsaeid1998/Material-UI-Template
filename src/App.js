@@ -2,9 +2,9 @@ import NotFound from './components/NotFound/NotFound';
 import Create from './components/Create/Create';
 import Home from './components/Home/Home';
 import Root from './components/Root/Root';
-import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
+import {Route, RouterProvider, createHashRouter, createRoutesFromElements } from 'react-router-dom';
 
-const router = createBrowserRouter(
+const router = createHashRouter(
   createRoutesFromElements(
     <Route path='/' element={<Root/>} >
       <Route index element={<Home/>} />

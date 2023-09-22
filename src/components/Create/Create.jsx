@@ -4,6 +4,7 @@ import { ChevronRight } from '@mui/icons-material';
 import { purple } from '@mui/material/colors';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useForm } from 'react-hook-form';
 
 
 
@@ -25,7 +26,17 @@ const Create = () => {
   const [price, setPrice] = useState(0)
   const navigate = useNavigate()
 
-  const sendData = () => {
+
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+
+  const sendData = ({ title, price }) => {
+    price = Number(price);
     fetch("http://localhost:3000/myData", {
       method: "POST",
       headers: {
@@ -37,12 +48,13 @@ const Create = () => {
     })
   }
   return <>
-    <Box >
-      <TextField
-      autoComplete='off'
-        onChange={(e) => {
-          setTitle(e.target.value)
-        }}
+    <Box 
+    onSubmit = { handleSubmit(sendData) }
+    autoComplete = "off"
+    sx = {{ width: "380px" }}
+    component = "form">
+      <TextField 
+        autoComplete='off'
         fullWidth
         label="Transaction Title"
         sx={{ mt: "22px", display: "block" }}
@@ -51,13 +63,26 @@ const Create = () => {
           startAdornment: <InputAdornment position="start">👉</InputAdornment>,
         }}
         variant="filled"
+        {...register("title",{
+          required: {value:true ,message:"Required field"},
+          minLength:{value:3 , message:"minlength id 3 "}
+          
+        })}
+        error={Boolean(errors.title)}
+        helperText={
+          Boolean(errors.title) ? errors.title?.message.toString() : null
+        }
       />
 
       <TextField
-      type='number'
-        onChange={(e) => {
-          setPrice(Number(e.target.value))
-        }}
+        type='number'
+        error={Boolean(errors.price)}
+        helperText={
+          Boolean(errors.price) ? errors.price?.message.toString() : null
+        }
+        {...register("price", {
+          required: { value: true, message: "Required filed" },
+        })}
         fullWidth
         label="Amount"
         sx={{ mt: "22px", display: "block" }}
@@ -67,9 +92,8 @@ const Create = () => {
         variant="filled"
       />
 
-      <ColorButton onClick={() => {
-        sendData()
-      }} sx={{ mt: "22px" }} variant="contained">
+      <ColorButton sx={{ mt: "22px" }} variant="contained" type='submit'  >
+        
         Submit <ChevronRight />
       </ColorButton>
 
@@ -78,3 +102,56 @@ const Create = () => {
 }
 
 export default Create
+
+//   < Box
+// onSubmit = { handleSubmit(onSubmit) }
+// autoComplete = "off"
+// sx = {{ width: "380px" }}
+// component = "form"
+//   >
+// <TextField
+//   fullWidth={true}
+//   label="Transaction Title"
+//   sx={{ mt: "22px", display: "block" }}
+//   InputProps={{
+//     startAdornment: <InputAdornment position="start">👉</InputAdornment>,
+//   }}
+//   variant="filled"
+//   {...register("title", {
+//     required: { value: true, message: "Requires field" },
+//     minLength: { value: 3, message: "minumn length is 3" },
+//   })}
+//   error={Boolean(errors.title)}
+//   helperText={
+//     Boolean(errors.title) ? errors.title?.message.toString() : null
+//   }
+// />
+
+// <TextField
+//   error={Boolean(errors.price)}
+//   helperText={
+//     Boolean(errors.price) ? errors.price?.message.toString() : null
+//   }
+//   {...register("price", {
+//     required: { value: true, message: "Required filed" },
+//   })}
+//   fullWidth={true}
+//   label=" Amount"
+//   id="filled-start-adornment"
+//   sx={{ mt: "22px", display: "block" }}
+//   InputProps={{
+//     startAdornment: <InputAdornment position="start">$</InputAdornment>,
+//   }}
+//   variant="filled"
+//   type="number"
+// />
+
+// <ColorButton
+//   type="submit"
+//   onClick={(params) => {}}
+//   sx={{ mt: "22px" }}
+//   variant="contained"
+// >
+//   Submit <ChevronRight />
+// </ColorButton>
+// </ >
